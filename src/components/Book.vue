@@ -85,6 +85,10 @@ export default {
           sortable: true
         },
         {
+          key: 'authors',
+          label: 'Authors',
+        },
+        {
           key: 'date_published',
           label: 'Date Published',
           sortable: true
