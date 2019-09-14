@@ -1,72 +1,101 @@
 <template>
-  <div class="max-w-md m-auto py-10">
-    <div class="text-red" v-if="error">{{ error }}</div>
-    <h3 class="font-mono font-regular text-3xl mb-4">Add a book</h3>
-    <form action="" @submit.prevent="addBook">
-      <div class="mb-6">
-        <input class="input"
-          autofocus autocomplete="off"
-          placeholder="ISBN"
-          v-model="newBook.isbn" />
-      </div>
-      <div class="mb-6">
-        <input class="input"
-          autofocus autocomplete="off"
-          placeholder="Title"
-          v-model="newBook.title" />
-      </div>
-      <div class="mb-6">
-        <input class="date"
-          v-model="newBook.date_published" />
-      </div>
-      <input type="submit" value="Save" class="font-sans font-bold px-4 rounded cursor-pointer no-underline bg-green hover:bg-green-dark block w-full py-4 text-white items-center justify-center" />
-    </form>
-
-    <hr class="border border-grey-light my-6" />
-
-    <ul class="list-reset mt-4">
-      <li class="py-4" v-for="book in books" :key="book.id" :book="book">
-
-        <div class="flex items-center justify-between flex-wrap">
-          <p class="block flex-1 font-mono font-semibold flex items-center ">
-            {{ book.isbn }}
-          </p>
-
-          <p class="block flex-1 font-mono font-semibold flex items-center ">
-            {{ book.title }}
-          </p>
-
-          <p class="block flex-1 font-mono font-semibold flex items-center ">
-            {{ book.date_published }}
-          </p>
-
-          <button class="bg-tranparent text-sm hover:bg-blue hover:text-white text-blue border border-blue no-underline font-bold py-2 px-4 mr-2 rounded"
-          @click.prevent="editBook(book)">Edit</button>
-
-          <button class="bg-transprent text-sm hover:bg-red text-red hover:text-white no-underline font-bold py-2 px-4 rounded border border-red"
-         @click.prevent="removeBook(book)">Delete</button>
-        </div>
-
-        <div v-if="book == editedBook">
-          <form action="" @submit.prevent="updateBook(book)">
-            <div class="mb-6 p-4 bg-white rounded border border-grey-light mt-4">
-              <input class="input" v-model="book.isbn" />
-              <input class="input" v-model="book.title" />
-              <input class="input" v-model="book.date_published" />
-              <input type="submit" value="Update" class=" my-2 bg-transparent text-sm hover:bg-blue hover:text-white text-blue border border-blue no-underline font-bold py-2 px-4 rounded cursor-pointer">
+  <div class="container mx-auto py-10">
+    <div class="py-2">
+    <b-button v-b-toggle.collapse-1 variant="primary">Add A Book</b-button>
+    </div>
+    <b-collapse id="collapse-1" class="mt-2">
+      <b-card w-50>
+        <p class="card-text">Enter book details</p>
+        <form action="" @submit.prevent="addBook">
+          <div class="bg-gray-200 p-4">
+            <span class="block text-gray-700 text-center bg-gray-400 px-10 py-2">
+              <b-form-input class="input"
+              autofocus autocomplete="off"
+              placeholder="ISBN"
+              v-model="newBook.isbn" ></b-form-input>
+            </span>
+            <span class="block text-gray-700 text-center bg-gray-400 px-10 py-2 mt-2">
+              <b-form-input class="input"
+              autofocus autocomplete="off"
+              placeholder="Title"
+              v-model="newBook.title" ></b-form-input>
+            </span>
+            <span class="block text-gray-700 text-center bg-gray-400 px-10 py-2 mt-2">
+              <b-form-input type="date"
+              v-model="newBook.date_published" ></b-form-input>
+            </span>
+            <span class="block text-gray-700 text-center bg-gray-400 px-10 py-2 mt-2">
+              <b-button v-b-toggle.collapse-1>Cancel</b-button>
+              <b-button type="submit" variant="primary" size="md">Save book record</b-button>
+            </span>
+          </div>
+        </form>
+      </b-card>
+    </b-collapse>
+    <b-table :items="books" :fields="fields" striped responsive="sm">
+      <template v-slot:cell(show_details)="row">
+        <b-button size="sm" variant="primary" v-b-modal.modal-prevent-closing @click.prevent="editBook(row.item)">Edit</b-button>
+        <b-modal
+          v-if="row.item == editedBook"
+          id="modal-prevent-closing"
+          ref="modal"
+          title="Update Book"
+          size="md"
+          hide-footer
+        >
+          <form action="" @submit.prevent="updateBook(row.item)">
+            <div class="bg-gray-200 p-4">
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2">
+                ISBN: <b-form-input class="input" v-model="row.item.isbn"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">
+                Title: <b-form-input class="input" v-model="row.item.title"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">
+                Date Published: <b-form-input type="date" class="input" v-model="row.item.date_published"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">
+                <b-button type="submit" variant="primary">Update</b-button>
+              </span>
             </div>
           </form>
-        </div>
-      </li>
-    </ul>
+        </b-modal>
+        <b-button size="sm" variant="danger"
+          @click.prevent="removeBook(row.item)" class="mr-2">Delete</b-button>
+      </template>
+    </b-table>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'Book',
   data () {
     return {
+      fields: [
+        {
+          key: 'isbn',
+          label: 'ISBN',
+          sortable: true
+        },
+        {
+          key: 'title',
+          label: 'Title',
+          sortable: true
+        },
+        {
+          key: 'date_published',
+          label: 'Date Published',
+          sortable: true
+        },
+        {
+          key: 'show_details',
+          label: 'Actions'
+        }
+      ],
+      perPage: 10,
+      currentPage: 1,
       books: [],
       newBook: [],
       error: '',
