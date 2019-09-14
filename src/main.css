@@ -35,6 +35,38 @@
   * @import "components/buttons";
   * @import "components/forms";
   */
+
+.input {
+  @apply appearance-none block w-full border rounded py-3 px-4 leading-tight;
+}
+
+.input:focus {
+  @apply outline-none bg-white;
+}
+
+.label {
+  @apply block uppercase tracking-wide text-xs font-bold mb-2;
+}
+
+.select {
+  @apply appearance-none py-3 px-4 pr-8 block w-full border
+    rounded leading-tight;
+    -webkit-appearance: none;
+}
+
+.select:focus {
+  @apply outline-none bg-white;
+}
+
+.link {
+  @apply no-underline;
+}
+
+.link-grey {
+}
+
+.link-grey:hover {
+}
  
  /**
   * This injects all of Tailwind's utility classes, generated based on your
