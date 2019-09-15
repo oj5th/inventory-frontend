@@ -7,6 +7,8 @@
       <div>
         <router-link to="/" class="link-grey px-2 no-underline" v-if="!signedIn()">Sign in</router-link>
         <router-link to="/signup" class="link-grey px-2 no-underline" v-if="!signedIn()">Sign Up</router-link>
+        <router-link to="/books" class="link-grey px-2 no-underline" v-if="signedIn()">Books</router-link>
+        <router-link to="/genres" class="link-grey px-2 no-underline" v-if="signedIn()">Genre</router-link>
         <a href="#" @click.prevent="signOut" class="link-grey px-2 no-underline" v-if="signedIn()">Sign out</a>
       </div>
     </div>

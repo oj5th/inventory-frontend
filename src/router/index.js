@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Signin from '@/components/Signin.vue'
 import Signup from '@/components/Signup.vue'
 import Book from '@/components/Book.vue'
+import Genre from '@/components/Genre.vue'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/books',
       name: 'Book',
       component: Book
+    },
+    {
+      path: '/genres',
+      name: 'Genre',
+      component: Genre
     },
     {
       path: '/',

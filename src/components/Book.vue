@@ -6,6 +6,7 @@
     <b-collapse id="collapse-1" class="mt-2">
       <b-card w-50>
         <p class="card-text">Enter book details</p>
+        <div class="text-red" v-if="error">{{ error }}</div>
         <form action="" @submit.prevent="addBook">
           <div class="bg-gray-200 p-4">
             <span class="block text-gray-700 text-center bg-gray-400 px-10 py-2">
@@ -34,10 +35,36 @@
     </b-collapse>
     <b-table :items="books" :fields="fields" striped responsive="sm">
       <template v-slot:cell(show_details)="row">
-        <b-button size="sm" variant="primary" v-b-modal.modal-prevent-closing @click.prevent="editBook(row.item)">Edit</b-button>
+        <b-button size="sm" variant="primary" v-b-modal.add-author @click.prevent="editBook(row.item)">Add Author</b-button>
         <b-modal
           v-if="row.item == editedBook"
-          id="modal-prevent-closing"
+          id="add-author"
+          ref="modal"
+          title="Add Author"
+          size="md"
+          hide-footer
+        >
+          <form action="" @submit.prevent="updateAuthor(row.item)">
+            <div class="bg-gray-200 p-4">
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2">
+                First Name: <b-form-input class="input" v-model="row.item.firstname"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2">
+                Middle Name: <b-form-input class="input" v-model="row.item.middlename"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2">
+                Last Name: <b-form-input class="input" v-model="row.item.lastname"></b-form-input>
+              </span>
+              <span class="block text-gray-700 text-center bg-gray-400 px-4 py-2 mt-2">
+                <b-button type="submit" variant="primary">Save</b-button>
+              </span>
+            </div>
+          </form>
+        </b-modal>
+        <b-button size="sm" variant="primary" v-b-modal.update-book @click.prevent="editBook(row.item)">Edit</b-button>
+        <b-modal
+          v-if="row.item == editedBook"
+          id="update-book"
           ref="modal"
           title="Update Book"
           size="md"
@@ -89,7 +116,7 @@ export default {
           label: 'Authors'
         },
         {
-          key: 'genre',
+          key: 'genres',
           label: 'Genre'
         },
         {
@@ -134,7 +161,7 @@ export default {
           this.books.push(response.data)
           this.newBook = ''
         })
-        .catch(error => this.setError(error, 'Cannot add book'))
+        .catch(error => this.setError(error, 'Please check all required field.'))
     },
     removeBook (book) {
       this.$http.secured.delete(`/api/v1/books/${book.id}`)
@@ -149,6 +176,11 @@ export default {
     updateBook (book) {
       this.editedBook = ''
       this.$http.secured.patch(`/api/v1/books/${book.id}`, { book: { isbn: book.isbn, title: book.title, date_published: book.date_published } })
+        .catch(error => this.setError(error, 'Cannot update book'))
+    },
+    updateAuthor (book) {
+      this.editedBook = ''
+      this.$http.secured.patch(`/api/v1/books/${book.id}`, { book: { authors_attributes: [{firstname: book.firstname, middlename: book.middlename, lastname: book.lastname}] } })
         .catch(error => this.setError(error, 'Cannot update book'))
     }
   }
