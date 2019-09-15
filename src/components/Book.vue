@@ -86,7 +86,11 @@ export default {
         },
         {
           key: 'authors',
-          label: 'Authors',
+          label: 'Authors'
+        },
+        {
+          key: 'genre',
+          label: 'Genre'
         },
         {
           key: 'date_published',
