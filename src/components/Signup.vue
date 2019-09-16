@@ -6,6 +6,16 @@
         <div class="text-red" v-if="error">{{ error }}</div>
 
         <div class="mb-6">
+          <label for="email" class="label">First Name</label>
+          <b-form-input v-model="firstname" class="input" id="email" placeholder="Juan"></b-form-input>
+        </div>
+
+        <div class="mb-6">
+          <label for="email" class="label">Last Name</label>
+          <b-form-input v-model="lastname" class="input" id="email" placeholder="Dela Cruz"></b-form-input>
+        </div>
+
+        <div class="mb-6">
           <label for="email" class="label">Email</label>
           <b-form-input type="email" v-model="email" class="input" id="email" placeholder="username@example.com"></b-form-input>
         </div>
@@ -46,7 +56,7 @@ export default {
   },
   methods: {
     signup () {
-      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation })
+      this.$http.plain.post('/signup', { email: this.email, password: this.password, password_confirmation: this.password_confirmation, firstname: this.firstname, lastname: this.lastname })
         .then(response => this.signupSuccessful(response))
         .catch(error => this.signupFailed(error))
     },
@@ -59,7 +69,7 @@ export default {
       localStorage.csrf = response.data.csrf
       localStorage.signedIn = true
       this.error = ''
-      this.$router.replace('/records')
+      this.$router.replace('/books')
     },
     signupFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
@@ -68,7 +78,7 @@ export default {
     },
     checkedSignedIn () {
       if (localStorage.signedIn) {
-        this.$router.replace('/records')
+        this.$router.replace('/books')
       }
     }
   }

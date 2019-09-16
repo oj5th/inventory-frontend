@@ -333,7 +333,7 @@ export default {
     },
     updateCategory (book) {
       this.editedBook = ''
-      this.$http.secured.patch(`/api/v1/books/${book.id}`, { book: { book_genres_attributes: [{genre_id: book.genre_id}]  } })
+      this.$http.secured.patch(`/api/v1/books/${book.id}`, { book: { book_genres_attributes: [{genre_id: book.genre_id}] } })
         .catch(error => this.setError(error, 'Cannot update book'))
     }
   }
