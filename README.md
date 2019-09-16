@@ -1,27 +1,29 @@
-# inventory-frontend
+# Overview
 
-> Front-end for my book inventory api.
+- Front-end for my book inventory api.
 
-## Build Setup
+## Requirements
 
-``` bash
-# install dependencies
+- node --stable-version
+- yarn --stable-version
+- vue
+
+## Installation
+
+To setup, you need to run the following commands.
+
+```
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+yarn global remove @vue/cli
+sudo yarn global add @vue/cli
+yarn global add @vue/cli-init
+vue
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
+yarn add vue bootstrap-vue bootstrap
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Usage
+
+1. Run the program using `yarn dev`.
+	- It will provide you the port that you will add to backend cors.
